@@ -8,6 +8,7 @@ import (
 func main() {
 
 	// generics.Exec()
+	// concurrency.Exec_done()
 
-	concurrency.Exec()
+	concurrency.Exec_gen()
 }
