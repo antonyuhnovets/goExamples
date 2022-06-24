@@ -11,7 +11,7 @@ import (
 	"time"
 )
 
-// Using Circuit(ctx context.Context) (string, error) function from circuit breaker pattern.
+// Using Circuit(ctx context.Context) (string, error) function from Circuit Breaker pattern.
 
 // Debounce-first compared to function-last.
 // Tracks the last time function was called,

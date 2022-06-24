@@ -2,7 +2,7 @@
 // preventing larger or cascading failures by eliminating recurring errors and providing
 // reasonable error responses.
 // ---------------------------------------------------------------------------------------
-// Circuit breaker pattern add functionality to control requests to service.
+// Circuit Breaker pattern add functionality to control requests to service.
 // Set number attemts of reaching service, delay, count failures and lock/unlock gorutine.
 
 package stability
@@ -25,7 +25,7 @@ func Breaker(circuit Circuit, failureTreshold uint) Circuit {
 	var m sync.RWMutex
 
 	return func(ctx context.Context) (string, error) {
-		m.RLock() // Establish read lock
+		m.RLock() // establish read lock
 
 		d := consecutiveFailures - int(failureTreshold)
 
@@ -40,21 +40,21 @@ func Breaker(circuit Circuit, failureTreshold uint) Circuit {
 			}
 		}
 
-		m.RUnlock() // Release read lock
+		m.RUnlock() // release read lock
 
-		response, err := circuit(ctx) // Issue request proper
+		response, err := circuit(ctx) // issue request proper
 
-		m.Lock() // Lock around shared resources
+		m.Lock() // lock around shared resources
 		defer m.Unlock()
 
-		lastAttempt = time.Now() // Record time of attempt
+		lastAttempt = time.Now() // record time of attempt
 
 		if err != nil {
 			consecutiveFailures++
 			return response, err
 		}
 
-		consecutiveFailures = 0 // Reset attempts to begin cycle again
+		consecutiveFailures = 0 // reset attempts to begin cycle again
 
 		return response, nil
 	}
