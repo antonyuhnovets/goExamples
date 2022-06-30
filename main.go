@@ -1,12 +1,9 @@
 package main
 
 import (
-	"context"
-	"fmt"
-	"time"
-
 	// "github.com/antonyuhnovets/examples/concurrency"
-	"github.com/antonyuhnovets/examples/stability"
+	// "github.com/antonyuhnovets/examples/stability"
+	"github.com/antonyuhnovets/examples/testchain"
 	// "github.com/antonyuhnovets/examples/generics"
 )
 
@@ -21,8 +18,8 @@ func main() {
 	// responce, err = wrapped(ctx)
 
 	// Using Retry pattern with emulator func:
-	wrapped := stability.Retry(stability.EmulateTransientError, 5, 2*time.Second)
-	result, err := wrapped(context.Background())
+	// wrapped := stability.Retry(stability.EmulateTransientError, 5, 2*time.Second)
+	// result, err := wrapped(context.Background())
 
 	// Using Timeout pattern:
 	// ctx := context.Background()
@@ -31,5 +28,7 @@ func main() {
 	// timeout := stability.Timeout(stability.SlowFunc)
 	// result, err := timeout(ctxt, "some input")
 
-	fmt.Println(result, err)
+	// fmt.Println(result, err)
+
+	testchain.Exec_chain()
 }

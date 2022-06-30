@@ -10,11 +10,11 @@ package stability
 import (
 	"context"
 	"errors"
+	"fmt"
 	"sync"
 	"time"
 )
 
-// Specifies the signature of the function that’s interacting with upstream service.
 type Circuit func(context.Context) (string, error)
 
 // Limits the number of failures requsting service by passing failureThreshold.
@@ -33,10 +33,10 @@ func Breaker(circuit Circuit, failureTreshold uint) Circuit {
 		// Including authomatic reset mechanism with an exponential backoff in which the dura‐
 		// tions of the delays between retries roughly doubles with each attempt.
 		if d >= 0 {
-			shouldRetryAt := lastAttempt.Add(time.Second * 2 << 2)
+			shouldRetryAt := lastAttempt.Add(time.Second * 2 << d)
 			if !time.Now().After(shouldRetryAt) {
 				m.RUnlock()
-				return "", errors.New("service unreachable")
+				return "", errors.New("service unreachable (cached)")
 			}
 		}
 
@@ -51,6 +51,7 @@ func Breaker(circuit Circuit, failureTreshold uint) Circuit {
 
 		if err != nil {
 			consecutiveFailures++
+			fmt.Println(consecutiveFailures)
 			return response, err
 		}
 
